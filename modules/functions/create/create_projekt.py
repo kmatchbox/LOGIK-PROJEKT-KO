@@ -383,6 +383,7 @@ print(f"  Debug: the_adsk_dir_linux:        {the_adsk_dir_linux}")
 print(f"  Debug: the_adsk_dir_macos:        {the_adsk_dir_macos}")
 '''
 
+
 # ========================================================================== #
 # This section defines projekt specific paths.
 # ========================================================================== #
@@ -440,6 +441,7 @@ def main():
         the_projekt_start_frame = the_projekt_information.get('the_projekt_start_frame')
         the_projekt_init_config = the_projekt_information.get('the_projekt_init_config')
         the_projekt_color_science = the_projekt_information.get('the_projekt_color_science')
+        the_projekt_env_profile = the_projekt_information.get('the_projekt_env_profile')
         the_projekt_user_name = the_projekt_information.get('the_projekt_user_name')
         the_projekt_primary_group = the_projekt_information.get('the_projekt_primary_group')
         the_projekt_os = the_projekt_information.get('the_projekt_os')
@@ -481,8 +483,15 @@ def main():
         bookmarks_file = 'resources/tmp/current_projekt_bookmarks.json'
         tmp_bookmarks_file = 'resources/tmp/tmp_bookmarks.json'
 
-        the_projekt_dirs_json_dir = 'resources/cfg/projekt_configuration/tree/projekt'
-        # the_projekt_dirs_json_files = [os.path.join(the_projekt_dirs_json_dir, file) for file in os.listdir(the_projekt_dirs_json_dir) if file.endswith('.json')]
+        # If the_projekt_env_profile is "logik_default", use the default tree.
+        # Might be good to wrap this into a function to avoid having to do this
+        # over if it's expanded to other aspects (i.e. Flame lib structure)
+
+        if the_projekt_env_profile == 'logik_default':
+            the_projekt_dirs_json_dir = 'resources/cfg/projekt_configuration/tree/projekt'
+        else:
+            the_projekt_dirs_json_dir = 'customization/profiles/' + the_projekt_env_profile + '/resources/cfg/projekt_configuration/tree/projekt'
+
         the_projekt_dirs_json_files = sorted(
             [os.path.join(the_projekt_dirs_json_dir, file) for file in os.listdir(the_projekt_dirs_json_dir) if file.endswith('.json')]
         )
@@ -682,6 +691,25 @@ def main():
         logger.log_and_print(f"Copying file from {the_src_projekt_init_config} to {the_tgt_projekt_init_config}")
 
         shutil.copyfile(the_src_projekt_init_config, the_tgt_projekt_init_config)
+
+        # Print a separator
+        logger.log_and_print(f"\n{separator}")
+
+        # ------------------------------------------------------------------ #
+
+        # Print a banner head
+        logger.log_and_print(f"{banner_head('Creating immutable environment profile')}")
+
+        # Should this maybe go into the_projekts_dir, the_projekt_dir, cfg? The benefit is it's be available to everyone.
+        env_profile_cfg = f"{the_projekt_flame_dirs}/{the_projekt_flame_setups_dir}/cfg/logik_projekt_env_profile"
+
+        # Write the the_projekt_env_profile to the file
+        try:
+            env_profile = open(env_profile_cfg, 'w')
+            env_profile.write(str(the_projekt_env_profile))
+            env_profile.close()
+        except Exception as e:
+            print(f"  Error writting logik_projekt_env_profile: {e}")
 
         # Print a separator
         logger.log_and_print(f"\n{separator}")

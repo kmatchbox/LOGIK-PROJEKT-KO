@@ -350,7 +350,8 @@ class WidgetLayoutRight(QWidget):
             "Start Frame:",
             "Init Config:",
             "Color Science:",
-            "OCIO Config:"
+            "OCIO Config:",
+            "Environment Profile:",
         ]
         self.projekt_summary.setPlainText("\n".join(keys))
 
@@ -374,7 +375,8 @@ class WidgetLayoutRight(QWidget):
             "template_start_frame": "Start Frame:",
             "template_init_config": "Init Config:",
             "template_color_science": "Color Science:",
-            "template_ocio_config": "OCIO Config:"
+            "template_ocio_config": "OCIO Config:",
+            "template_env_profile": "Environment Profile:"
         }
 
         current_text = self.projekt_summary.toPlainText()
@@ -506,6 +508,7 @@ class WidgetLayoutRight(QWidget):
             the_projekt_start_frame = self.get_projekt_summary_value("Start Frame:")
             the_projekt_init_config = self.get_projekt_summary_value("Init Config:")
             the_projekt_color_science = self.get_projekt_summary_value("Color Science:")
+            the_projekt_env_profile = self.get_projekt_summary_value("Environment Profile:")
 
             # Get the_hostname
             the_hostname = GetEnvironment.projekt_hostname() or 'N/A'
@@ -790,6 +793,7 @@ class WidgetLayoutRight(QWidget):
             "the_projekt_start_frame": summary_dict.get("Start Frame", ""),
             "the_projekt_init_config": summary_dict.get("Init Config", ""),
             "the_projekt_color_science": summary_dict.get("Color Science", ""),
+            "the_projekt_env_profile": summary_dict.get("Environment Profile", ""),
 
             "the_projekt_user_name": env_dict.get("Username", ""),
             "the_projekt_primary_group": env_dict.get("Group", ""),

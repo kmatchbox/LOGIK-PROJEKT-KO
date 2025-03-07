@@ -136,6 +136,7 @@ from modules.widgets.line_edit.flame_projekt_directory import WidgetFlameProjekt
 from modules.widgets.line_edit.flame_projekt_media_cache import WidgetFlameProjektMediaCache
 from modules.widgets.line_edit.flame_projekt_setups_dir import WidgetFlameProjektSetupsDir
 from modules.widgets.combo_box.ocio_config import WidgetOCIOConfig
+from modules.widgets.combo_box.env_profile import WidgetEnvProfile
 from modules.functions.string.string_utilities import string_clean
 from modules.functions.string.string_utilities import string_clean_camel
 from modules.functions.string.string_utilities import string_clean_lower
@@ -279,6 +280,7 @@ class LayoutLeft(QWidget):
             # (WidgetFlameProjektMediaCache(), QLabel()),
             # (WidgetFlameProjektSetupsDir(), QLabel()),
             (WidgetOCIOConfig(), QLabel()),
+            (WidgetEnvProfile(), QLabel()),
         ]
 
         # Set minimum height for each widget and align labels and widgets horizontally
