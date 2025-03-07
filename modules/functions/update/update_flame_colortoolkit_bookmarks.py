@@ -69,11 +69,12 @@ def get_base_path():
     else:
         return os.path.abspath(
             os.path.join(
-                os.path.dirname(__file__)
+                os.path.dirname(__file__), '..', '..', '..',
             )
         )
     
 # -------------------------------------------------------------------------- #
+
 
 def get_resource_path(relative_path):
     base_path = get_base_path()
