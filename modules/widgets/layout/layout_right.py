@@ -560,6 +560,11 @@ class WidgetLayoutRight(QWidget):
             # Update environment summary text
             summary_text = '\n'.join(f"{key}: {value}" for key, value in env_data.items())
             self.environment_summary.setPlainText(summary_text)
+
+            # Validate the environment profile.
+            if not self.validate_environment_profile(the_projekt_env_profile):
+                QMessageBox.critical(self, "Error", f"The custom environment folder that is used in this template '{the_projekt_env_profile}' is missing.\n\nPlease have whomever supplied the template file also supply the custom profile which should be placed in:\ncustomization/profiles/{the_projekt_env_profile}")
+
         except Exception as e:
             print(f"Error loading environment data: {e}")
             QMessageBox.critical(self, "Error", f"An error occurred while loading environment data:\n{e}")
@@ -593,6 +598,21 @@ class WidgetLayoutRight(QWidget):
 
     def update_environment_summary(self):
         self.load_environment_summary()
+
+    def validate_environment_profile(self, projekt_env_profile):
+
+        # If profile is not default, vaidate the folder exists
+        if projekt_env_profile != 'logik_default':
+            profiles_dir = get_resource_path('customization/profiles')
+            check_path = os.path.join(profiles_dir, projekt_env_profile)
+
+            if os.path.exists(check_path):
+                return True
+            else:
+                return False
+
+        else:
+            return True
 
 # =========================================================================== #
 
@@ -675,6 +695,7 @@ class WidgetLayoutRight(QWidget):
     #         self.command_monitor.verticalScrollBar().maximum()
     #     )
 
+
     def create_projekt(self):
         projekt_name = self.get_projekt_summary_value("Projekt Name:")
         if not projekt_name:
@@ -682,6 +703,13 @@ class WidgetLayoutRight(QWidget):
             return
 
         self.update_command_monitor("Starting PROJEKT creation...")
+
+        # Validate the environment profile again to prevent the user from ignoring the previous error.
+        projekt_env_profile = self.get_projekt_summary_value("Environment Profile:")
+
+        if not self.validate_environment_profile(projekt_env_profile):
+            self.update_command_monitor(f"Error: The custom environment folder that is used in this template '{projekt_env_profile}' is missing.\n\nPlease have whomever supplied the template file also supply the custom profile which should be placed in:\ncustomization/profiles/{projekt_env_profile}")
+            return
         
         # Gather information from variables
         projekt_info = self.gather_projekt_info()
